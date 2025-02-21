@@ -151,6 +151,6 @@ async def to_code(config):
     await climate.register_climate(var, config)
     cg.add_library(
         name="HeatPump",
-        repository="https://github.com/SwiCago/HeatPump#5d1e146771d2f458907a855bf9d5d4b9bf5ff033",
+        repository="https://github.com/chwdt/HeatPump",
         version=None, # this appears to be ignored?
     )
