@@ -726,14 +726,6 @@ void MitsubishiHeatPump::setup() {
     if (hp->connect(this->get_hw_serial_(), this->baud_, this->rx_pin_, this->tx_pin_)) {
         hp->sync();
     }
-    else {
-        ESP_LOGCONFIG(
-                TAG,
-                "Connection to HeatPump failed."
-                " Marking MitsubishiHeatPump component as failed."
-        );
-        this->mark_failed();
-    }
 
     // create various setpoint persistence:
     cool_storage = global_preferences->make_preference<uint8_t>(this->get_object_id_hash() + 1);
