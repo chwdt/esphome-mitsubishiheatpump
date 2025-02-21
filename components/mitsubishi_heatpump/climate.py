@@ -96,8 +96,7 @@ CONFIG_SCHEMA = climate.CLIMATE_SCHEMA.extend(
 ).extend(cv.COMPONENT_SCHEMA)
 
 
-@coroutine
-def to_code(config):
+async def to_code(config):
     serial = HARDWARE_UART_TO_SERIAL[PLATFORM_ESP8266][config[CONF_HARDWARE_UART]]
     var = cg.new_Pvariable(config[CONF_ID], cg.RawExpression(f"&{serial}"))
 
@@ -138,18 +137,18 @@ def to_code(config):
 
     if CONF_HORIZONTAL_SWING_SELECT in config:
         conf = config[CONF_HORIZONTAL_SWING_SELECT]
-        swing_select = yield select.new_select(conf, options=HORIZONTAL_SWING_OPTIONS)
-        yield cg.register_component(swing_select, conf)
+        swing_select = await select.new_select(conf, options=HORIZONTAL_SWING_OPTIONS)
+        await cg.register_component(swing_select, conf)
         cg.add(var.set_horizontal_vane_select(swing_select))
 
     if CONF_VERTICAL_SWING_SELECT in config:
         conf = config[CONF_VERTICAL_SWING_SELECT]
-        swing_select = yield select.new_select(conf, options=VERTICAL_SWING_OPTIONS)
-        yield cg.register_component(swing_select, conf)
+        swing_select = await select.new_select(conf, options=VERTICAL_SWING_OPTIONS)
+        await cg.register_component(swing_select, conf)
         cg.add(var.set_vertical_vane_select(swing_select))
 
-    yield cg.register_component(var, config)
-    yield climate.register_climate(var, config)
+    await cg.register_component(var, config)
+    await climate.register_climate(var, config)
     cg.add_library(
         name="HeatPump",
         repository="https://github.com/SwiCago/HeatPump#5d1e146771d2f458907a855bf9d5d4b9bf5ff033",
